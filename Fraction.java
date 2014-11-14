@@ -18,8 +18,12 @@ public class Fraction {
 
     @Override
     public String toString() {
-        return "" + getNumerator() + '/' + getDenominator();
-    }
+		if(denominator==1) {
+			return "" + getNumerator();
+		} else {
+			return "" + getNumerator() + '/' + getDenominator();
+		}   
+   }
 
     public int getNumerator() {
         return numerator;
@@ -58,11 +62,24 @@ public class Fraction {
     }
 
     public Fraction multiply(Fraction other) {
-
         int num = this.getNumerator() * other.getNumerator();
         int denom = this.getDenominator() * other.getDenominator();
         return new Fraction(num, denom);
     }
+	
+	public Fraction add(Fraction other) {
+		int denom = this.getDenominator()*other.getDenominator();
+		int num = (denom/this.getDenominator()) * this.getNumerator() + (denom/other.getDenominator()) * other.getNumerator();
+		return new Fraction(num, denom);
+	
+	}
+	
+	public Fraction subtract(Fraction other) {
+		int denom = this.getDenominator()*other.getDenominator();
+		int num = (denom/this.getDenominator()) * this.getNumerator() - (denom/other.getDenominator()) * other.getNumerator();
+		return new Fraction(num, denom);
+	}
+		
 
     private int myGcd(int a, int b) {
         while (b != 0) {
