@@ -14,11 +14,17 @@ public class Fraction {
         int gcd = myGcd(num, denom);
         setNumerator(num / gcd);
         setDenominator(denom / gcd);
+        if(numerator>0 && denominator <0) {		// normalize fraction moving negative
+        	setNumerator(-numerator);			// sign over the numerator
+        	setDenominator(-denominator);
+        }
     }
 
     @Override
     public String toString() {
-		if(denominator==1) {
+    	if(numerator==0) {
+    		return "" + 0;
+    	} else if(denominator==1) {
 			return "" + getNumerator();
 		} else {
 			return "" + getNumerator() + '/' + getDenominator();
@@ -29,7 +35,7 @@ public class Fraction {
         return numerator;
     }
 
-    public void setNumerator(int num) {
+    private void setNumerator(int num) {	// set to private to state immutability
         numerator = num;
     }
 
@@ -37,7 +43,7 @@ public class Fraction {
         return denominator;
     }
 
-    public void setDenominator(int num) {
+    private void setDenominator(int num) {		// set to private to state immutability
         denominator = num;
     }
 
@@ -66,6 +72,12 @@ public class Fraction {
         int denom = this.getDenominator() * other.getDenominator();
         return new Fraction(num, denom);
     }
+	
+	public Fraction divide(Fraction other) {
+		int num = this.getNumerator() * other.getDenominator();
+		int denom = this.getDenominator() * other.getNumerator();
+		return new Fraction(num, denom);
+	}
 	
 	public Fraction add(Fraction other) {
 		int denom = this.getDenominator()*other.getDenominator();
