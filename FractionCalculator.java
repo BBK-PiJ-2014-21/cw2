@@ -20,8 +20,9 @@ public class FractionCalculator {
 			String[] input = inputString.split("\\s+");	// matches one or more whitespaces
 			int i=0;
 			for(; i<input.length; i++) {	
-				System.out.println("input at position " + i + " = " + input[i]);	// just for testing, to be deleted
-				if(input[i].equals("+")) {
+				System.out.println("input at position " + i + " = " + input[i]);	// just for testing
+				if(input[i].equals("+") || input[i].equals("-") 
+				|| input[i].equals("/") || input[i].equals("*")) {
 					if (!rememberOperation(input, i)) {
 						System.out.println("reloading...");		// just for testing, to be deleted
 						reset();
@@ -38,7 +39,6 @@ public class FractionCalculator {
 			return false;
 		} else {
 			operation = input[i];
-			System.out.println("stored +");		// just for testing, to be deleted
 			return true;
 		}
 	}
