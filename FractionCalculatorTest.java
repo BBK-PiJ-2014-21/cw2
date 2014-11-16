@@ -5,8 +5,8 @@ public class FractionCalculatorTest {
 		
 		FractionCalculator c = new FractionCalculator();
 		System.out.println("Remembered operation at start: " + c.getRememberedOperation());
-		System.out.println("TEST 1 (evaluate input '1/2 / -499 	')");
-		c.evaluate(c.getStoredValue(), "1/2 / -499 	");	// test 1
+		System.out.println("TEST 1 (evaluate input '1/2 / -499 132/222 -2 	')");
+		c.evaluate(c.getStoredValue(), "1/2 / -499 132/222 -2 	");	// test 1
 		System.out.println("operation after test1 (should be /): " + c.getRememberedOperation() + '\n');
 		System.out.println("TEST 2 (evaluate input '0/2')");
 		c.evaluate(c.getStoredValue(), "0/2");	// test 2
