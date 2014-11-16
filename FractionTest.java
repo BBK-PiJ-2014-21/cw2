@@ -17,7 +17,7 @@ public class FractionTest {
 	test(new Fraction(-1, 2),new Fraction(1, -2),"error test 3");
 	test(new Fraction(-1, -2),new Fraction(1, 2),"error test 4");
 	System.out.println();
-	test(new Fraction(4, -8),new Fraction(1, 2),"error test 5 (this should be printed as -1/2 !equals 1/2)");
+	test(new Fraction(4, -8),new Fraction(1, 2),"error test 5 (this should be printed, as -1/2 !equals 1/2)");
 
         // extend with extra tests
 	
@@ -36,13 +36,14 @@ public class FractionTest {
 	// test add(), subtract() and divide()
 	System.out.println("Testing add() method (-4/-4 + -4/3)");
 	System.out.println((x.add(y)).toString() + '\n');
-	System.out.println("Testing subtract() method (-4/4 - -4/3)");
+	System.out.println("Testing subtract() method (-4/-4 - -4/3)");
 	System.out.println((x.subtract(y)).toString() + '\n');
-	System.out.println("Testing divide() method (-4/4 / -4/3)");
+	System.out.println("Testing divide() method (-4/-4 / -4/3)");
 	System.out.println((x.divide(y)).toString() + '\n');
 	Fraction z = new Fraction(0,-2);
 	System.out.println("Fraction 0/-2");
 	System.out.println(z.toString());
+	// test negate() and absValue()
 	System.out.println("negate() Fraction 0/-2");
 	System.out.println((z.negate()).toString() + '\n');
 	System.out.println("negate() Fraction -4/3");

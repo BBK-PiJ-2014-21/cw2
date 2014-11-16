@@ -22,9 +22,7 @@ public class Fraction {
 
     @Override
     public String toString() {
-    	if(numerator==0) {
-    		return "" + 0;
-    	} else if(denominator==1) {
+    	if(numerator == 0 || denominator == 1) {
 			return "" + getNumerator();
 		} else {
 			return "" + getNumerator() + '/' + getDenominator();
