@@ -19,69 +19,59 @@ public class FractionCalculator {
 	public Fraction evaluate(Fraction fraction, String inputString) {
 			String[] input = inputString.split("\\s+"); // matches one or more whitespaces
 			int i=0;	// position of an element of String[] input
-			int j=0;	// position of a char in a specific element of String[] input
 			int numerator = 0;
 			int denominator = 0;
 			scanInput: for(i=0; i<input.length; i++) {	
 				boolean whole = true;
 				System.out.println("input at position " + i + " = " + input[i]); // just for testing
 				if(input[i].equals("")) {
-					continue scanInput;		                        // this should skip a '\t' input
+					continue scanInput;		          // this should skip a '\t' input
 				}
 				if(input[i].equals("+") || input[i].equals("-") 
 				|| input[i].equals("/") || input[i].equals("*")) {
 					if (!rememberOperation(input, i)) {
-						reset();
-						return fraction;
-					}
-				} else { 								            // look for a whole number
-					w: for(j=1; j<input[i].length(); j++) {
-						if (input[i].charAt(0) != '-'
-						&& !Character.isDigit(input[i].charAt(0))) {					
-							whole = false;
-							break w;
-						} else {
-							if(!Character.isDigit(input[i].charAt(j))) {
-								whole = false;								
-								break w;
-							}
-						}
-					}
-					if(whole == true) {
-						numerator = Integer.parseInt(input[i]);
-						denominator = 1;
-						fraction = new Fraction(numerator, denominator);
-						System.out.println("value in calculator = " + this.fraction.toString());
-						System.out.println("new input = " + fraction.toString());
-					} else {										// look for a fraction
-						for(j=0; j<input[i].length(); j++) {
-							if(input[i].charAt(j) == '/') {
-								numerator = Integer.parseInt(input[i].substring(0,j));
-								denominator = Integer.parseInt(input[i].substring(j+1));
-								fraction = new Fraction(numerator, denominator);
-								System.out.println("value in calculator = " + this.fraction.toString());
-								System.out.println("input found: " + fraction.toString());
-							}
-						}	
-					}
-					if(operation != null) {
-							this.fraction = fractionOperation(fraction);
-							operation = null;
-							fraction = null;
-							System.out.println("value in calculator after operation = " + this.fraction.toString());
-							if(fraction!=null) { System.out.println("input is NOT null, something is wrong");}
-							System.out.println("Stored operation after operation = " + operation);
+						this.fraction = new Fraction(0,1);
+						return this.fraction;
 					} else {
-						this.fraction = fraction;
-					}		
-	//			} else {											// look for absolute value
-		//			if(input[i].equalsIgnoreCase("a") || input[i].equalsIgnoreCase("abs")) {
-			//			this.fraction = fraction.absValue();
-				//		continue scanInput;
-	//				}
-				}	
+						continue scanInput;
+					}
+				} else if(isWholeNumber(input[i])) {
+					numerator = Integer.parseInt(input[i]);
+					denominator = 1;
+					fraction = new Fraction(numerator, denominator);
+					System.out.println("value in calculator = " + this.fraction.toString());
+					System.out.println("new input = " + fraction.toString());
+					this.fraction = calculateFraction(fraction);
+					operation = null;
+					fraction = null;
+					System.out.println("value in calculator after operation = " + this.fraction.toString());
+					continue scanInput;
+				} else if (returnFraction(input[i]) != null) {			// look for a fraction
+					fraction = returnFraction(input[i]);
+					System.out.println("value in calculator = " + this.fraction.toString());
+					System.out.println("new input: " + fraction.toString());
+					this.fraction = calculateFraction(fraction);
+					operation = null;
+					fraction = null;
+					System.out.println("value in calculator after operation = " + this.fraction.toString());
+					continue scanInput;
+				} else if(input[i].equalsIgnoreCase("a") || input[i].equalsIgnoreCase("abs")) {
+					System.out.println("value in calculator = " + this.fraction.toString());					
+					this.fraction = this.fraction.absValue();
+					System.out.println("value in calculator after operation = " + this.fraction.toString());
+					continue scanInput;
+				} else if(input[i].equalsIgnoreCase("n") || input[i].equalsIgnoreCase("neg")) {
+					System.out.println("value in calculator = " + this.fraction.toString());					
+					this.fraction = this.fraction.negate();
+					System.out.println("value in calculator after operation = " + this.fraction.toString());
+					continue scanInput;
+				} else if(input[i].equalsIgnoreCase("c") || input[i].equalsIgnoreCase("clear")) {				
+					this.fraction = new Fraction(0,1);
+					continue scanInput;
+				}
 			}						
-			return fraction;
+			operation = null; // reset the operation in memory to null;
+			return this.fraction;
 	}
 	
 	public boolean rememberOperation(String[] input, int i) {
@@ -95,7 +85,51 @@ public class FractionCalculator {
 		}
 	}
 	
-	public Fraction fractionOperation(Fraction newFraction) {
+	public boolean isWholeNumber(String input) {
+		if (input.charAt(0) != '-' && !Character.isDigit(input.charAt(0))) {					
+			return false;		
+		} else {
+			if(input.length()>1) {
+				for(int j=1; j<input.length(); j++) {
+					if(!Character.isDigit(input.charAt(j))) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;  // input '-' won't happen as already going into the operation routine
+	}
+	
+	public Fraction returnFraction(String input) {	// returns null if it's not a fraction
+		Fraction fraction = null;
+		int j=0;
+		if(input.length()<3) {
+			return fraction;
+		} else {
+			boolean slash = false;
+			for(j=1; j<input.length(); j++) {
+				if(input.charAt(j) == '/') {
+					slash = true;
+					break;
+				}
+			}
+			if(!slash) {
+				return fraction;
+			} else {
+				String n = input.substring(0,j);
+				String d = input.substring(j+1);
+				if(n.equals("-") || !isWholeNumber(n) || !isWholeNumber(d)) {
+					return fraction;
+				} 
+				int numerator = Integer.parseInt(n);
+				int denominator = Integer.parseInt(d);
+				fraction = new Fraction(numerator, denominator);
+				return fraction;
+			}
+		}
+	}	
+	
+	public Fraction calculateFraction(Fraction newFraction) {
 		if (operation != null) {
 			switch (operation) {
 				case "+": return fraction.add(newFraction);
@@ -106,12 +140,6 @@ public class FractionCalculator {
 		} else {
 			return newFraction;
 		}
-	}
-
-	public void reset() {
-		System.out.println("resetting...");			// just for testing, to be deleted
-		fraction = new Fraction(0,1);
-		operation = null;
 	}
 	
 }	
