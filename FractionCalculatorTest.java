@@ -6,11 +6,11 @@ public class FractionCalculatorTest {
 		FractionCalculator c = new FractionCalculator();
 		System.out.println();
 		printInitialValues(c);
-		System.out.println("TEST EXAMPLE (evaluate input ' 1/2 - 3/4 * abs '\n' 8 7/8 neg +')");
-		System.out.println(c.evaluate(c.getStoredValue(), " 1/2 - 3/4 * abs '\n' 8 7/8 neg +").toString());	// test 0
-		System.out.println("Stored value after test1 (should be -7/8): " + c.getStoredValue().toString() + '\n');
-		System.out.println("TEST 1 (evaluate input '2/2 + 4/2	+  n')");
-		System.out.println(c.evaluate(c.getStoredValue(), "2/2 + 4/2	+  n").toString());	// test 1
+		System.out.println("TEST EXAMPLE (evaluate input ' 1/2 - 3/4 * abs')");
+		System.out.println(c.evaluate(c.getStoredValue(), " 1/2 - 3/4 * abs").toString());	// test 0
+		System.out.println("Stored value after test1 (should be 1/4): " + c.getStoredValue().toString() + '\n');
+		System.out.println("TEST 1 (evaluate input '2/2 + 4/2)");
+		System.out.println(c.evaluate(c.getStoredValue(), "2/2 + 4/2").toString());	// test 1
 		System.out.println("Stored value after test1 (should be -3): " + c.getStoredValue().toString() + '\n');
 		System.out.println("TEST 2 (evaluate input ' a')");
 		printInitialValues(c);

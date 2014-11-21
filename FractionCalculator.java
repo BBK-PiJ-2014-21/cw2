@@ -21,17 +21,16 @@ public class FractionCalculator {
 			int i=0;	// position of an element of String[] input
 			int numerator = 0;
 			int denominator = 0;
-			scanInput: for(i=0; i<input.length; i++) {	
+			for(i=0; i<input.length; i++) {	
 				if(input[i].equals("")) {
-					continue scanInput;		          // this should skip a '\t' input
+					continue;		          // this should skip a '\t' input
 				} else if(input[i].equals("+") || input[i].equals("-") 
 					|| input[i].equals("/") || input[i].equals("*")) {
 					if (!rememberOperation(input, i)) {
 						this.fraction = new Fraction(0,1);
-						prinTest(input[i]);			// TO DELETE
 						break;
 					} else {
-						continue scanInput;
+						continue;
 					}
 				} else if(isWholeNumber(input[i])) {
 					numerator = Integer.parseInt(input[i]);
@@ -40,31 +39,25 @@ public class FractionCalculator {
 					this.fraction = calculateFraction(fraction);
 					operation = null;
 					fraction = null;
-					prinTest(input[i]);			// TO DELETE
-					continue scanInput;
+					continue;
 				} else if (returnFraction(input[i]) != null) {			// look for a fraction
 					fraction = returnFraction(input[i]);
 					this.fraction = calculateFraction(fraction);
 					operation = null;
 					fraction = null;
-					prinTest(input[i]);		// TO DELETE
-					continue scanInput;
+					continue;
 				} else if(input[i].equalsIgnoreCase("a") || input[i].equalsIgnoreCase("abs")) {			
 					this.fraction = this.fraction.absValue();
-					prinTest(input[i]);		// TO DELETE
-					continue scanInput;
+					continue;
 				} else if(input[i].equalsIgnoreCase("n") || input[i].equalsIgnoreCase("neg")) {					
 					this.fraction = this.fraction.negate();
-					prinTest(input[i]);		// TO DELETE
-					continue scanInput;
+					continue;
 				} else if(input[i].equalsIgnoreCase("c") || input[i].equalsIgnoreCase("clear")) {				
 					this.fraction = new Fraction(0,1);
-					prinTest(input[i]);		// TO DELETE
-					continue scanInput;
+					continue;
 				} else {			// input error
 					this.fraction = new Fraction(0,1);
 					System.out.println("Error");
-					prinTest(input[i]);		// TO DELETE
 					break;
 				}
 			}						
@@ -78,7 +71,6 @@ public class FractionCalculator {
 			return false;
 		} else {
 			operation = input[i];
-			prinTest(input[i]);		// TO DELETE
 			return true;
 		}
 	}
@@ -140,7 +132,7 @@ public class FractionCalculator {
 		}
 	}
 	
-	public void prinTest(String input) {	// just for testing, to delete
+	public void prinTest(String input) {	// TO DELETE
 		System.out.println("After this input: " + input);
 		System.out.println("Value in calculator: " + getStoredValue());
 		System.out.println("Remembered operation: " + getRememberedOperation());
