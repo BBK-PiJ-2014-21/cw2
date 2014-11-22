@@ -114,7 +114,8 @@ public class FractionCalculator {
 			} else {
 				String n = input.substring(0,j);
 				String d = input.substring(j+1);
-				if(n.equals("-") || !isWholeNumber(n) || !isWholeNumber(d)) {
+				if(n.equals("-") || n.equals("+") || !isWholeNumber(n) 
+				|| d.equals("-") || d.equals("+") || !isWholeNumber(d)) {
 					return fraction;
 				} 
 				int numerator = Integer.parseInt(n);
@@ -137,13 +138,7 @@ public class FractionCalculator {
 			return newFraction;
 		}
 	}
-	
-	public void prinTest(String input) {	// TO DELETE
-		System.out.println("After this input: " + input);
-		System.out.println("Value in calculator: " + getStoredValue());
-		System.out.println("Remembered operation: " + getRememberedOperation());
-	}	
-	
+
 	public void printLineResult(String line) {
 		Fraction result = evaluate(getStoredValue(), line);
 		if(result!=null) {	// when the calculator reset will not print the current value, 
@@ -158,12 +153,16 @@ public class FractionCalculator {
 		String input = "";
 		while(true) {
 			System.out.print(">>> ");
-			input = scanInput.nextLine();
-			if(input.equalsIgnoreCase("q")) {
-				break;
+			if(scanInput.hasNextLine()) {
+				input = scanInput.nextLine();
+				if(input.equalsIgnoreCase("q") || input.equalsIgnoreCase("quit")) {
+					break;
+				} else {
+					c.printLineResult(input);
+				}
 			} else {
-				c.printLineResult(input);
-			}
+				break;
+			} 
 		}
 		System.out.println("Goodbye");
 	}
