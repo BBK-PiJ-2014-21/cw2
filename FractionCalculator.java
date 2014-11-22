@@ -3,20 +3,20 @@ import java.util.Scanner;
 public class FractionCalculator {
 	private Fraction fraction;
 	private String operation;
-	
+
 	public FractionCalculator() {
 		fraction = new Fraction(0,1);
 		operation = null;
 	}
-	
+
 	public Fraction getStoredValue() {
 		return fraction;
 	}
-	
+
 	public String getRememberedOperation() {
 		return operation;
 	}
-		
+
 	public Fraction evaluate(Fraction fraction, String inputString) {
 		String[] input = inputString.split("\\s+"); // matches one or more whitespaces
 		int i=0;	// position of an element of String[] input
@@ -70,7 +70,7 @@ public class FractionCalculator {
 		this.fraction = new Fraction(0,1);
 		this.operation = null;
 	}
-	
+ 
 	public boolean rememberOperation(String[] input, int i) {
 		if(operation != null) {
 			System.out.println("Error: there is another operation in memory.");		
@@ -80,7 +80,7 @@ public class FractionCalculator {
 			return true;
 		}
 	}
-	
+
 	public boolean isWholeNumber(String input) {
 		if (input.charAt(0) != '-' && input.charAt(0) != '+' && !Character.isDigit(input.charAt(0))) {					
 			return false;		
@@ -126,6 +126,10 @@ public class FractionCalculator {
 		}
 	}	
 	
+/* precedece rules are not applied: the specs say that, if an operation is being remembered,
+	it has to be performed with the value currently in the calculator as the first operand,
+	and the fraction as the second operand.
+*/
 	public Fraction calculateFraction(Fraction newFraction) {
 		if (operation != null) {
 			switch (operation) {
@@ -139,10 +143,16 @@ public class FractionCalculator {
 		}
 	}
 
+/* after reset (due to a second operation entered while another is being remembered -line 30-
+   or from a catch-all invalid input -line 59-, the returned fraction from evaluate() is null
+   as there is no valid result for that line, while this.fraction is reset to zero but it's not 
+   printed. As the specs say: "[...] for each line, print just the final result of evaluating
+   that line. Please note: you do not need to deal with invalid inputs". 
+*/	
 	public void printLineResult(String line) {
 		Fraction result = evaluate(getStoredValue(), line);
-		if(result!=null) {	// when the calculator reset will not print the current value, 
-			System.out.println(result.toString());					   	 // which is zero
+		if(result!=null) {	
+			System.out.println(result.toString());					   	
 		}
 	}	
 
@@ -151,6 +161,7 @@ public class FractionCalculator {
 		printWelcomeMessage();
 		Scanner scanInput = new Scanner(System.in);
 		String input = "";
+		boolean endOfInputException = false;
 		while(true) {
 			System.out.print(">>> ");
 			if(scanInput.hasNextLine()) {
@@ -161,17 +172,20 @@ public class FractionCalculator {
 					c.printLineResult(input);
 				}
 			} else {
+				endOfInputException = true;
 				break;
 			} 
 		}
-		System.out.println("Goodbye");
+		if(endOfInputException == true) {	// print "Goodbye" only for an end of input exception
+			System.out.println("Goodbye");	// not for a "quit" input (as per specs)
+		}
 	}
-	
+
 	public static void printWelcomeMessage() {
 		System.out.println("==============================");
 		System.out.println("WELCOME TO FRACTION CALCULATOR");
 		System.out.println("written by Federico Bartolomei");
 		System.out.println("==============================");
 	}
-		
+
 }
