@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class FractionCalculator {
 	private Fraction fraction;
@@ -15,24 +16,24 @@ public class FractionCalculator {
 	public String getRememberedOperation() {
 		return operation;
 	}
-	
+		
 	public Fraction evaluate(Fraction fraction, String inputString) {
-			String[] input = inputString.split("\\s+"); // matches one or more whitespaces
-			int i=0;	// position of an element of String[] input
-			int numerator = 0;
-			int denominator = 0;
-			for(i=0; i<input.length; i++) {	
-				if(input[i].equals("")) {
-					continue;		          // this should skip a '\t' input
-				} else if(input[i].equals("+") || input[i].equals("-") 
-					|| input[i].equals("/") || input[i].equals("*")) {
-					if (!rememberOperation(input, i)) {
-						this.fraction = new Fraction(0,1);
-						break;
-					} else {
-						continue;
-					}
-				} else if(isWholeNumber(input[i])) {
+		String[] input = inputString.split("\\s+"); // matches one or more whitespaces
+		int i=0;	// position of an element of String[] input
+		int numerator = 0;
+		int denominator = 0;
+		for(i=0; i<input.length; i++) {	
+			if(input[i].equals("")) {
+				continue;		          // this should skip a '\t' input
+			} else if(input[i].equals("+") || input[i].equals("-") 
+				|| input[i].equals("/") || input[i].equals("*")) {					
+				if (!rememberOperation(input, i)) {	// operation already in memory
+					reset();
+					return null;					
+				} else {
+					continue;
+				}
+				} else if(isWholeNumber(input[i])) {	// look for a whole number
 					numerator = Integer.parseInt(input[i]);
 					denominator = 1;
 					fraction = new Fraction(numerator, denominator);
@@ -40,7 +41,7 @@ public class FractionCalculator {
 					operation = null;
 					fraction = null;
 					continue;
-				} else if (returnFraction(input[i]) != null) {			// look for a fraction
+				} else if (returnFraction(input[i]) != null) {	// look for a fraction
 					fraction = returnFraction(input[i]);
 					this.fraction = calculateFraction(fraction);
 					operation = null;
@@ -55,14 +56,19 @@ public class FractionCalculator {
 				} else if(input[i].equalsIgnoreCase("c") || input[i].equalsIgnoreCase("clear")) {				
 					this.fraction = new Fraction(0,1);
 					continue;
-				} else {			// input error
-					this.fraction = new Fraction(0,1);
+				} else {			// any other kind of exception (apart from end of input)
 					System.out.println("Error");
-					break;
+					reset();
+					return null;
 				}
 			}						
-			operation = null; // reset the operation in memory to null;
+			operation = null; // reset the operation in memory to null at each end of line;
 			return this.fraction;	
+	}
+	
+	public void reset() {
+		this.fraction = new Fraction(0,1);
+		this.operation = null;
 	}
 	
 	public boolean rememberOperation(String[] input, int i) {
@@ -76,7 +82,7 @@ public class FractionCalculator {
 	}
 	
 	public boolean isWholeNumber(String input) {
-		if (input.charAt(0) != '-' && !Character.isDigit(input.charAt(0))) {					
+		if (input.charAt(0) != '-' && input.charAt(0) != '+' && !Character.isDigit(input.charAt(0))) {					
 			return false;		
 		} else {
 			if(input.length()>1) {
@@ -87,8 +93,8 @@ public class FractionCalculator {
 				}
 			}
 		}
-		return true;  // input '-' won't happen as already going into the operation routine
-	}
+		return true;  // inputs containing just "-" or "+" won't return here as
+	}	              // they would be already into the operation routine (line 28)
 	
 	public Fraction returnFraction(String input) {	// returns null if it's not a fraction
 		Fraction fraction = null;
@@ -136,6 +142,37 @@ public class FractionCalculator {
 		System.out.println("After this input: " + input);
 		System.out.println("Value in calculator: " + getStoredValue());
 		System.out.println("Remembered operation: " + getRememberedOperation());
+	}	
+	
+	public void printLineResult(String line) {
+		Fraction result = evaluate(getStoredValue(), line);
+		if(result!=null) {	// when the calculator reset will not print the current value, 
+			System.out.println(result.toString());					   	 // which is zero
+		}
+	}	
+
+	public static void main(String[] args) {
+		FractionCalculator c = new FractionCalculator();
+		printWelcomeMessage();
+		Scanner scanInput = new Scanner(System.in);
+		String input = "";
+		while(true) {
+			System.out.print(">>> ");
+			input = scanInput.nextLine();
+			if(input.equalsIgnoreCase("q")) {
+				break;
+			} else {
+				c.printLineResult(input);
+			}
+		}
+		System.out.println("Goodbye");
 	}
 	
-}	
+	public static void printWelcomeMessage() {
+		System.out.println("==============================");
+		System.out.println("WELCOME TO FRACTION CALCULATOR");
+		System.out.println("written by Federico Bartolomei");
+		System.out.println("==============================");
+	}
+		
+}
