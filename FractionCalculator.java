@@ -125,12 +125,12 @@ public class FractionCalculator {
 				} 
 				int numerator = Integer.parseInt(n);
 				int denominator = Integer.parseInt(d);
-				if(denominator==0) {	// Invalid input with denominator 0
-					return null; 	   // (already printed in Fraction.java class)
+				fraction = new Fraction(numerator, denominator);
+				if(denominator==0) {
+					return null;
 				} else {
-					fraction = new Fraction(numerator, denominator);
 					return fraction;	
-				}
+				}			
 			}
 		}
 	}	
