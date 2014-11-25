@@ -33,37 +33,42 @@ public class FractionCalculator {
 				} else {
 					continue;
 				}
-				} else if(isWholeNumber(input[i])) {	// look for a whole number
-					numerator = Integer.parseInt(input[i]);
-					denominator = 1;
-					fraction = new Fraction(numerator, denominator);
-					this.fraction = calculateFraction(fraction);
-					operation = null;
-					fraction = null;
-					continue;
-				} else if (returnFraction(input[i]) != null) {	// look for a fraction
-					fraction = returnFraction(input[i]);
-					this.fraction = calculateFraction(fraction);
-					operation = null;
-					fraction = null;
-					continue;
-				} else if(input[i].equalsIgnoreCase("a") || input[i].equalsIgnoreCase("abs")) {			
-					this.fraction = this.fraction.absValue();
-					continue;
-				} else if(input[i].equalsIgnoreCase("n") || input[i].equalsIgnoreCase("neg")) {					
-					this.fraction = this.fraction.negate();
-					continue;
-				} else if(input[i].equalsIgnoreCase("c") || input[i].equalsIgnoreCase("clear")) {				
-					this.fraction = new Fraction(0,1);
-					continue;
-				} else {			// any other kind of exception (apart from end of input)
-					System.out.println("Error");
-					reset();
+			} else if(isWholeNumber(input[i])) {	// look for a whole number
+				numerator = Integer.parseInt(input[i]);
+				denominator = 1;
+				fraction = new Fraction(numerator, denominator);
+				this.fraction = calculateFraction(fraction);
+				operation = null;
+				fraction = null;
+				continue;
+			} else if (returnFraction(input[i]) != null) {	// look for a fraction
+				fraction = returnFraction(input[i]);
+				if(fraction.getDenominator()==0) {	// Invalid input with denominator 0
+					reset();	// (error message already printed in Fraction.java class)
 					return null;
+				} else {
+					this.fraction = calculateFraction(fraction);
+					operation = null;
+					fraction = null;
+					continue;
 				}
-			}						
-			operation = null; // reset the operation in memory to null at each end of line;
-			return this.fraction;	
+			} else if(input[i].equalsIgnoreCase("a") || input[i].equalsIgnoreCase("abs")) {			
+				this.fraction = this.fraction.absValue();
+				continue;
+			} else if(input[i].equalsIgnoreCase("n") || input[i].equalsIgnoreCase("neg")) {					
+				this.fraction = this.fraction.negate();
+				continue;
+			} else if(input[i].equalsIgnoreCase("c") || input[i].equalsIgnoreCase("clear")) {				
+				this.fraction = new Fraction(0,1);
+				continue;
+			} else {			// any other kind of exception (apart from end of input)
+				System.out.println("Error");
+				reset();
+				return null;
+			}
+		}						
+		operation = null; // reset the operation in memory to null at each end of line;
+		return this.fraction;	
 	}
 	
 	public void reset() {
@@ -103,7 +108,7 @@ public class FractionCalculator {
 			return fraction;
 		} else {
 			boolean slash = false;
-			for(j=1; j<input.length(); j++) {
+			for(j=1; j<input.length()-1; j++) {
 				if(input.charAt(j) == '/') {
 					slash = true;
 					break;
@@ -120,8 +125,12 @@ public class FractionCalculator {
 				} 
 				int numerator = Integer.parseInt(n);
 				int denominator = Integer.parseInt(d);
-				fraction = new Fraction(numerator, denominator);
-				return fraction;
+				if(denominator==0) {	// Invalid input with denominator 0
+					return null; 	   // (already printed in Fraction.java class)
+				} else {
+					fraction = new Fraction(numerator, denominator);
+					return fraction;	
+				}
 			}
 		}
 	}	
